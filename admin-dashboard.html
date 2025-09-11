@@ -5,28 +5,69 @@
   <title>Admin Dashboard</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
       background: #f7f7f7;
-      margin: 0;
-      padding: 0;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
     }
-    .dashboard-container {
-      max-width: 800px;
-      margin: 40px auto;
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #2c3e50;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #f1c40f;
+    }
+    .sidebar a {
+      padding: 12px 20px;
+      color: #fff;
+      text-decoration: none;
+      display: block;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: #34495e;
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+    }
+    .content-section {
+      display: none;
+      height: calc(100vh - 64px);
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      padding: 32px;
+      padding: 24px;
     }
+    .content-section.active {
+      display: block;
+    }
+
     h1 {
       text-align: center;
       color: #a68e4c;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 24px;
+      margin-top: 16px;
       background: #f9f9f9;
       border-radius: 6px;
       overflow: hidden;
@@ -43,43 +84,64 @@
     tr:nth-child(even) {
       background: #f0f8ff;
     }
-    #logoutBtn {
-      margin-top: 32px;
-      display: block;
-      width: 100%;
-      padding: 10px;
-      background: #a68e4c;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    #logoutBtn:hover {
-      background: #a68e4c;
+
+    .card {
+      background: #f0f8ff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
-  <div class="dashboard-container">
-    <h1>Admin Dashboard</h1>
-    <table id="usersTable">
-      <thead>
-        <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- User rows will be injected here -->
-      </tbody>
-    </table>
-    <button id="logoutBtn">Logout</button>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Admin</h2>
+    <a class="menu-link active" data-target="dashboard">Dashboard</a>
+    <a class="menu-link" data-target="users">Users</a>
+    <a class="menu-link" data-target="settings">Settings</a>
+    <a id="logoutBtn">Logout</a>
   </div>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <!-- Dashboard Section -->
+    <div id="dashboard" class="content-section active">
+      <h1>Dashboard Overview</h1>
+      <div class="card">📊 Total Users: <span id="totalUsers">0</span></div>
+      <div class="card">🏡 Properties Managed: 128</div>
+      <div class="card">💼 Active Agents: 12</div>
+    </div>
+
+    <!-- Users Section -->
+    <div id="users" class="content-section">
+      <h1>Users List</h1>
+      <table id="usersTable">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- User rows will be injected here -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Settings Section -->
+    <div id="settings" class="content-section">
+      <h1>Settings</h1>
+      <div class="card">⚙️ Change Password</div>
+      <div class="card">🌐 Language Preferences</div>
+      <div class="card">🔔 Notification Settings</div>
+    </div>
+  </div>
+
   <script>
-    // Fetch all users from localStorage
+    // Fetch users from localStorage
     const users = JSON.parse(localStorage.getItem("users")) || {};
     const tbody = document.querySelector("#usersTable tbody");
     tbody.innerHTML = "";
@@ -94,6 +156,26 @@
       tbody.appendChild(row);
     });
 
+    // Dashboard total users count
+    document.getElementById("totalUsers").textContent = Object.keys(users).length;
+
+    // Sidebar navigation
+    const links = document.querySelectorAll(".menu-link");
+    const sections = document.querySelectorAll(".content-section");
+
+    links.forEach(link => {
+      link.addEventListener("click", () => {
+        // Remove active classes
+        links.forEach(l => l.classList.remove("active"));
+        sections.forEach(s => s.classList.remove("active"));
+
+        // Activate clicked link and target section
+        link.classList.add("active");
+        const target = link.getAttribute("data-target");
+        document.getElementById(target).classList.add("active");
+      });
+    });
+
     // Logout logic
     document.getElementById("logoutBtn").onclick = function() {
       localStorage.removeItem("isLoggedIn");
@@ -101,119 +183,5 @@
       window.location.href = "index.html";
     };
   </script>
-
-  <!-- Dashboard Charts -->
-
-  <section class="dashboard-charts">
-  <div class="charts-container">
-    <!-- Pie Chart -->
-    <div class="chart-box">
-      <canvas id="pieChart"></canvas>
-    </div>
-
-    <!-- Graph (Line Chart) -->
-    <div class="chart-box">
-      <canvas id="lineChart"></canvas>
-    </div>
-  </div>
-</section>
-
-<style>
-.dashboard-charts {
-  
-  padding: 20px;
-  background-color: #000; /* black background */
-  color: white;
-  font-family: Arial, sans-serif;
-}
-
-.charts-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.chart-box {
-  flex: 1;
-  background-color: #1a1a1a;
-  padding: 20px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-canvas {
-  max-width: 100%;
-  max-height: 300px;  /* fixed height to prevent stretching */
-}
-
-</style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  // Pie Chart
-  const pieCtx = document.getElementById('pieChart').getContext('2d');
-  const pieChart = new Chart(pieCtx, {
-    type: 'pie',
-    data: {
-      labels: ['Completed', 'Pending', 'Cancelled'],
-      datasets: [{
-        data: [55, 30, 15],
-        backgroundColor: ['#a68e4c', 'white', '#000'],
-        borderColor: ['#000', '#000', '#000'],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          labels: {
-            color: 'white'
-          }
-        }
-      }
-    }
-  });
-
-  // Line Chart
-  const lineCtx = document.getElementById('lineChart').getContext('2d');
-  const lineChart = new Chart(lineCtx, {
-    type: 'line',
-    data: {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-      datasets: [{
-        label: 'Revenue',
-        data: [1200, 1900, 3000, 2500, 3200, 4000],
-        borderColor: '#a68e4c',
-        backgroundColor: 'rgba(166, 142, 76, 0.2)',
-        fill: true,
-        tension: 0.4,
-        pointBackgroundColor: '#a68e4c',
-        pointBorderColor: '#000'
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        x: {
-          ticks: { color: 'white' },
-          grid: { color: '#333' }
-        },
-        y: {
-          ticks: { color: 'white' },
-          grid: { color: '#333' }
-        }
-      },
-      plugins: {
-        legend: {
-          labels: { color: 'white' }
-        }
-      }
-    }
-  });
-</script>
-
-
-
 </body>
+</html>
