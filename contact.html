@@ -29,7 +29,7 @@
           <li class="nav-item dropdown">
             <a href="#" class="nav-link" ><span data-i18n="home">Home</span> <i class="fas fa-chevron-down"></i></a>
             <ul class="dropdown-menu">
-              <li><a href="index.html"><span data-i18n="home1">Home 1</span></a></li>
+              <li><a href="home.html"><span data-i18n="home1">Home 1</span></a></li>
               <li><a href="home2.html"><span data-i18n="home2">Home 2</span></a></li>
             </ul>
           </li>
@@ -79,7 +79,7 @@
           <li class="mobile-dropdown-parent">
             <span><span data-i18n="home">Home</span> <i class="fas fa-chevron-down"></i></span>
             <ul class="mobile-dropdown">
-              <li><a href="index.html"><span data-i18n="home1">Home 1</span></a></li>
+              <li><a href="home.html"><span data-i18n="home1">Home 1</span></a></li>
               <li><a href="home2.html"><span data-i18n="home2">Home 2</span></a></li>
             </ul>
           </li>
@@ -121,7 +121,7 @@
       </div>
       <div class="avatar-dropdown" id="avatarDropdown">
         <ul>
-          <li><a href="index.html" id="logoutBtn"><span data-i18n="logout">Logout</span></a></li>
+          <li><a href="home.html" id="logoutBtn"><span data-i18n="logout">Logout</span></a></li>
         </ul>
       </div>
     </div>
@@ -146,349 +146,8 @@
 </section>
 
 <script>
-  // Mobile menu setup
-  const hamburger = document.getElementById("hamburger");
-  const hamburgerMenu = document.getElementById("hamburgerMenu");
-
-  // Show/hide mobile menu on hamburger click
-  hamburger.addEventListener("click", () => {
-    hamburger.classList.toggle("active");
-    hamburgerMenu.classList.toggle("active");
-  });
-
-  // Toggle dropdowns for mobile menu
-  document.querySelectorAll('.mobile-dropdown-parent > span').forEach(link => {
-    link.addEventListener('click', function() {
-      const parentLi = this.parentElement;
-      const dropdown = parentLi.querySelector('.mobile-dropdown');
-      dropdown.classList.toggle('active');
-    });
-  });
-
-  // Desktop dropdown toggle logic
-  document.querySelectorAll('.nav-item.dropdown > .nav-link').forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      document.querySelectorAll('.dropdown-menu').forEach(menu => {
-        if (menu !== this.nextElementSibling) {
-          menu.classList.remove('active');
-        }
-      });
-      const dropdownMenu = this.nextElementSibling;
-      if (dropdownMenu) {
-        dropdownMenu.classList.toggle('active');
-      }
-    });
-  });
-
-  // Redirect on desktop dropdown menu item click
-  document.querySelectorAll('.dropdown-menu a').forEach(link => {
-    link.addEventListener('click', function(e) {
-      const href = this.getAttribute('href');
-      if (href && href !== "#") {
-        window.location.href = href;
-        document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
-      }
-    });
-  });
-
-  // Redirect on normal nav link click
-  document.querySelectorAll('.nav-menu > .nav-item:not(.dropdown) .nav-link').forEach(link => {
-    link.addEventListener('click', function(e) {
-      const href = this.getAttribute('href');
-      if (href && href !== "#") {
-        window.location.href = href;
-      }
-    });
-  });
-
-  // Auth link toggle for desktop and mobile
-  function setupAuthLinks() {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    const authLinks = [document.getElementById("authLink"), document.getElementById("mobileAuthLink")];
-
-    authLinks.forEach(link => {
-      if (!link) return;
-      if (isLoggedIn) {
-        link.innerText = "Logout";
-        link.href = "#";
-        link.onclick = (e) => {
-          e.preventDefault();
-          localStorage.removeItem("isLoggedIn");
-          localStorage.removeItem("currentUser");
-          window.location.href = "index.html";
-        };
-      } else {
-        link.innerText = "Login";
-        link.href = "index.html";
-        link.onclick = null;
-      }
-    });
-  }
-  setupAuthLinks();
-
-  // Theme toggle
-  const toggleBtn = document.getElementById('toggleBtn');
-  let darkMode = localStorage.getItem('darkMode') === 'true';
-
-  function applyTheme() {
-    if (darkMode) {
-      document.body.classList.add('dark-mode');
-      toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
-    } else {
-      document.body.classList.remove('dark-mode');
-      toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
-    }
-  }
-
-  toggleBtn.addEventListener('click', () => {
-    darkMode = !darkMode;
-    localStorage.setItem('darkMode', darkMode);
-    applyTheme();
-  });
-  applyTheme();
-
-  // Avatar initials logic
-  const avatarCircle = document.getElementById('avatarCircle');
-  const avatarInitials = document.getElementById('avatarInitials');
-  const avatarDropdown = document.getElementById('avatarDropdown');
-  const logoutBtn = document.getElementById('logoutBtn');
-  const currentUserEmail = localStorage.getItem("currentUser");
-  const users = JSON.parse(localStorage.getItem("users")) || {};
-
-  if (currentUserEmail && users[currentUserEmail]) {
-    const firstName = users[currentUserEmail].firstName || "";
-    const lastName = users[currentUserEmail].lastName || "";
-    const initials = (firstName[0] || "").toUpperCase() + (lastName[0] || "").toUpperCase();
-    avatarInitials.textContent = initials;
-  } else {
-    avatarInitials.textContent = "?";
-  }
-
-  // Show/hide avatar dropdown on click
-  avatarCircle.addEventListener('click', function(e) {
-    e.stopPropagation();
-    avatarDropdown.style.display = avatarDropdown.style.display === "block" ? "none" : "block";
-  });
-
-  document.addEventListener('click', function(e) {
-    if (!avatarCircle.contains(e.target) && !avatarDropdown.contains(e.target)) {
-      avatarDropdown.style.display = "none";
-    }
-  });
-
-  // Logout action
-  logoutBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("currentUser");
-    window.location.href = "index.html";
-  });
 </script>
 
-<style>
-  /* Base styles for hamburger icon */
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 24px;
-    height: 18px;
-    cursor: pointer;
-    z-index: 1000;
-  }
-
-  .hamburger span {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background-color: #333;
-    transition: all 0.3s ease-in-out;
-  }
-
-  .dark-mode .hamburger span {
-    background-color: #fff;
-  }
-
-  /* Hamburger menu animation */
-  .hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-  }
-
-  .hamburger.active span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
-  }
-
-  /* Hide navigation on mobile */
-  @media (max-width: 768px) {
-    .nav-menu {
-      display: none;
-    }
-    .hamburger {
-      display: flex;
-    }
-  }
-
-  /* Styles for the mobile hamburger menu */
-  .mobile-menu-wrapper {
-    position: relative;
-  }
-
-  .hamburger-menu {
-    display: none;
-    flex-direction: column;
-    background: #23272f;
-    color: #fff;
-    position: absolute;
-    top: 50px;
-    right: 0;
-    width: 220px;
-    border-radius: 8px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
-    padding: 20px 0;
-    z-index: 9999;
-    list-style: none;
-  }
-
-  .hamburger-menu.active {
-    display: flex;
-  }
-
-  .hamburger-menu li {
-    padding: 10px 24px;
-    border-bottom: 1px solid #333;
-  }
-
-  .hamburger-menu li:last-child {
-    border-bottom: none;
-  }
-
-  .hamburger-menu a,
-  .hamburger-menu span {
-    color: #00f7ff;
-    text-decoration: none;
-    font-size: 1.1rem;
-    display: block;
-    cursor: pointer;
-    font-weight: 500;
-  }
-
-  .hamburger-menu ul {
-    list-style: none;
-    padding-left: 20px;
-    margin-top: 5px;
-  }
-
-  .hamburger-menu li.mobile-dropdown-parent .mobile-dropdown {
-    display: none;
-  }
-
-  .hamburger-menu li.mobile-dropdown-parent .mobile-dropdown.active {
-    display: block;
-  }
-
-  .toggle-btn {
-    background: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .toggle-btn:hover {
-    background: #f0f0f0;
-  }
-
-  .avatar-circle {
-    position: relative;
-    cursor: pointer;
-    z-index: 1001;
-    overflow: visible;
-  }
-
-  .avatar-circle {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-left: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #eee;
-    position: relative;
-    cursor: pointer;
-  }
-
-  .avatar-circle img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .avatar-dropdown {
-    display: none;
-    position: absolute;
-    top: 65px;
-    right: 140px;
-    background: #fff;
-    min-width: 100px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
-    border-radius: 8px;
-    z-index: 1002;
-    padding: 4px 0;
-  }
-
-  .avatar-dropdown ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .avatar-dropdown li {
-    padding: 6px 12px;
-  }
-
-  .avatar-dropdown a {
-    color: #23272f;
-    text-decoration: none;
-    font-size: 0.95rem;
-    display: block;
-    border-radius: 4px;
-    transition: background 0.2s;
-  }
-
-  .avatar-dropdown a:hover {
-    background: #f0f0f0;
-  }
-
-  @media (max-width: 768px) {
-    .toggle-btn,
-    .avatar-circle {
-      margin-left: 8px;
-      width: 32px;
-      height: 32px;
-    }
-  }
-
-  @media (min-width: 769px) {
-    .hamburger-menu {
-      display: none !important;
-    }
-  }
-</style>
 <!-- 🔷 Protest home page  -->
 
   <script>
@@ -1487,11 +1146,27 @@ function changeLanguage(lang) {
     }
   });
 
-  // Handle RTL for Arabic & Hebrew
+  // Handle RTL for Arabic & Hebrew - but keep header layout consistent
   if(lang === "ar" || lang === "he") {
     document.documentElement.dir = "rtl";
+    // Override RTL for header to maintain consistent layout
+    document.querySelector('.header').style.direction = "ltr";
+    // Force avatar dropdown to stay in same position
+    const avatarDropdown = document.querySelector('.avatar-dropdown');
+    if(avatarDropdown) {
+      avatarDropdown.style.right = "0px";
+      avatarDropdown.style.left = "auto";
+    }
   } else {
     document.documentElement.dir = "ltr";
+    // Ensure header direction is LTR
+    document.querySelector('.header').style.direction = "ltr";
+    // Force avatar dropdown to stay in same position
+    const avatarDropdown = document.querySelector('.avatar-dropdown');
+    if(avatarDropdown) {
+      avatarDropdown.style.right = "0px";
+      avatarDropdown.style.left = "auto";
+    }
   }
 }
 

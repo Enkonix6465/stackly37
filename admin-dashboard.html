@@ -2,164 +2,2084 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
-    body {
+    :root {
+      --primary-color: #a68e4c;
+      --primary-dark: #8b7340;
+      --secondary-color: #2c3e50;
+      --accent-color: #f1c40f;
+      --success-color: #27ae60;
+      --warning-color: #f39c12;
+      --danger-color: #e74c3c;
+      --light-bg: #f8f9fa;
+      --dark-bg: #1a1a1a;
+      --card-bg: #ffffff;
+      --text-primary: #2c3e50;
+      --text-secondary: #6c757d;
+      --border-color: #e9ecef;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    [data-theme="dark"] {
+      --light-bg: #1a1a1a;
+      --dark-bg: #2d2d2d;
+      --card-bg: #2d2d2d;
+      --text-primary: #ffffff;
+      --text-secondary: #b0b0b0;
+      --border-color: #404040;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f7f7f7;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--light-bg);
+      color: var(--text-primary);
       display: flex;
+      flex-direction: column;
       height: 100vh;
       overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-container {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 80px);
     }
 
     /* Sidebar */
     .sidebar {
-      width: 220px;
-      background: #2c3e50;
+      width: 280px;
+      background: linear-gradient(135deg, var(--secondary-color) 0%, #34495e 100%);
       color: #fff;
       display: flex;
       flex-direction: column;
-      padding: 20px 0;
+      padding: 0;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
     }
-    .sidebar h2 {
+
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      pointer-events: none;
+    }
+
+    .sidebar-header {
+      padding: 30px 20px;
       text-align: center;
-      margin-bottom: 40px;
-      color: #f1c40f;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 1;
     }
+
+    .sidebar h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-bottom: 8px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar-subtitle {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 300;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 20px 0;
+      position: relative;
+      z-index: 1;
+    }
+
     .sidebar a {
-      padding: 12px 20px;
-      color: #fff;
+      padding: 16px 24px;
+      color: rgba(255, 255, 255, 0.9);
       text-decoration: none;
-      display: block;
-      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease;
       cursor: pointer;
+      position: relative;
+      font-weight: 500;
+      border-left: 3px solid transparent;
     }
-    .sidebar a:hover,
+
+    .sidebar a::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      background: var(--accent-color);
+      transition: width 0.3s ease;
+    }
+
+    .sidebar a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-left-color: var(--accent-color);
+      transform: translateX(5px);
+    }
+
+    .sidebar a:hover::before {
+      width: 3px;
+    }
+
     .sidebar a.active {
-      background: #34495e;
+      background: rgba(241, 196, 15, 0.2);
+      color: var(--accent-color);
+      border-left-color: var(--accent-color);
+    }
+
+    .sidebar a i {
+      margin-right: 12px;
+      width: 20px;
+      text-align: center;
+      font-size: 16px;
     }
 
     /* Main content */
     .main-content {
       flex: 1;
-      padding: 32px;
+      padding: 30px;
       overflow-y: auto;
+      background: var(--light-bg);
+      transition: all 0.3s ease;
     }
+
     .content-section {
       display: none;
-      height: calc(100vh - 64px);
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      padding: 24px;
+      animation: fadeIn 0.5s ease-in-out;
     }
+
     .content-section.active {
       display: block;
     }
 
-    h1 {
-      text-align: center;
-      color: #a68e4c;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Dashboard Overview */
+    .dashboard-header {
+      margin-bottom: 30px;
+    }
+
+    .dashboard-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .dashboard-subtitle {
+      color: var(--text-secondary);
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #fff;
+    }
+
+    .stat-icon.users { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .stat-icon.properties { background: linear-gradient(135deg, #f093fb, #f5576c); }
+    .stat-icon.agents { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .stat-icon.revenue { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .stat-change {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 20px;
+      margin-top: 8px;
+      display: inline-block;
+    }
+
+    .stat-change.positive {
+      background: rgba(39, 174, 96, 0.1);
+      color: var(--success-color);
+    }
+
+    .stat-change.negative {
+      background: rgba(231, 76, 60, 0.1);
+      color: var(--danger-color);
+    }
+
+    /* Content Cards */
+    .content-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
       margin-bottom: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .content-card:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+    }
+
+    .card-title i {
+      margin-right: 12px;
+      color: var(--primary-color);
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 16px;
-      background: #f9f9f9;
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    th, td {
-      padding: 12px;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-    th {
-      background: #a68e4c;
-      color: #fff;
-    }
-    tr:nth-child(even) {
-      background: #f0f8ff;
+      background: var(--card-bg);
     }
 
-    .card {
-      background: #f0f8ff;
-      padding: 20px;
+    th, td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tr:hover {
+      background: rgba(166, 142, 76, 0.05);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Action Buttons */
+    .btn {
+      padding: 10px 20px;
+      border: none;
       border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(166, 142, 76, 0.3);
+    }
+
+    .btn-secondary {
+      background: var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--text-secondary);
+      color: #fff;
+    }
+
+    .btn-success {
+      background: var(--success-color);
+      color: #fff;
+    }
+
+    .btn-warning {
+      background: var(--warning-color);
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: var(--danger-color);
+      color: #fff;
+    }
+
+    /* Header Styles */
+    .toggle-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 16px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--text-primary);
+    }
+
+    .toggle-btn:hover {
+      transform: scale(1.05);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      margin-left: 16px;
+    }
+
+    .avatar-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .avatar-circle:hover {
+      transform: scale(1.05);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .avatar-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      min-width: 140px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      border: 1px solid var(--border-color);
+    }
+
+
+    .avatar-dropdown.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .avatar-dropdown ul {
+      list-style: none;
+      padding: 8px 0;
+      margin: 0;
+    }
+
+    .avatar-dropdown li {
+      margin: 0;
+    }
+
+    .avatar-dropdown a {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      gap: 8px;
+      cursor: pointer;
+      background: rgba(166, 142, 76, 0.05);
+      border-radius: 8px;
+      margin: 4px;
+    }
+
+    .avatar-dropdown a:hover {
+      background: rgba(166, 142, 76, 0.1);
+      color: var(--primary-color);
+    }
+
+    .avatar-dropdown a i {
+      width: 16px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        position: fixed;
+        top: 80px;
+        left: -100%;
+        height: calc(100vh - 80px);
+        z-index: 1000;
+        transition: left 0.3s ease;
+      }
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .main-content {
+        padding: 20px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .dashboard-title {
+        font-size: 24px;
+      }
+
+      .toggle-btn,
+      .avatar-circle {
+        margin-left: 8px;
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    /* Dark Mode Styles */
+    [data-theme="dark"] .sidebar {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    }
+
+    [data-theme="dark"] .stat-card,
+    [data-theme="dark"] .content-card {
+      background: var(--card-bg);
+      border-color: var(--border-color);
+    }
+
+    [data-theme="dark"] .toggle-btn {
+      background: var(--card-bg);
+      border-color: var(--border-color);
+      color: var(--text-primary);
+    }
+
+    [data-theme="dark"] .avatar-dropdown {
+      background: var(--card-bg);
+      border-color: var(--border-color);
+    }
+
+    /* Additional Component Styles */
+    .recent-activity {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: rgba(166, 142, 76, 0.05);
+      border-radius: 12px;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .activity-icon.success {
+      background: var(--success-color);
+    }
+
+    .activity-icon.warning {
+      background: var(--warning-color);
+    }
+
+    .activity-icon.info {
+      background: #3498db;
+    }
+
+    .activity-content {
+      flex: 1;
+    }
+
+    .activity-title {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .activity-desc {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .activity-time {
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .property-info, .agent-info, .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .property-name, .agent-name, .user-name {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .property-location, .agent-email, .user-email {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-badge.available {
+      background: rgba(39, 174, 96, 0.1);
+      color: var(--success-color);
+    }
+
+    .status-badge.sold {
+      background: rgba(52, 152, 219, 0.1);
+      color: #3498db;
+    }
+
+    .status-badge.completed {
+      background: rgba(39, 174, 96, 0.1);
+      color: var(--success-color);
+    }
+
+    .status-badge.pending {
+      background: rgba(243, 156, 18, 0.1);
+      color: var(--warning-color);
+    }
+
+    .status-badge.active {
+      background: rgba(39, 174, 96, 0.1);
+      color: var(--success-color);
+    }
+
+    .status-badge.inactive {
+      background: rgba(231, 76, 60, 0.1);
+      color: var(--danger-color);
+    }
+
+    .admin-badge {
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-left: 8px;
+      display: inline-block;
+    }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .rating i {
+      color: var(--accent-color);
+      font-size: 14px;
+    }
+
+    .rating span {
+      margin-left: 8px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .chart-placeholder {
+      height: 300px;
+      background: linear-gradient(135deg, rgba(166, 142, 76, 0.1), rgba(241, 196, 15, 0.1));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed var(--border-color);
+    }
+
+    .chart-info {
+      text-align: center;
+    }
+
+    .chart-info h3 {
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .chart-info p {
+      color: var(--text-secondary);
       margin-bottom: 16px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      background: rgba(166, 142, 76, 0.05);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .setting-info h3 {
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      font-size: 16px;
+    }
+
+    .setting-info p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    /* Enhanced button styles */
+    .btn {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    /* Loading animation for stats */
+    .stat-value {
+      animation: countUp 1s ease-out;
+    }
+
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scrollbar styling */
+    .main-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .main-content::-webkit-scrollbar-track {
+      background: var(--border-color);
+      border-radius: 3px;
+    }
+
+    .main-content::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 3px;
+    }
+
+    .main-content::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-dark);
     }
   </style>
 </head>
 <body>
+  
+  <!-- Sticky Header -->
+<header class="header">
+  <div class="container">
+    <div class="nav-wrapper">
+      <div class="logo">
+        <img src="assets/images/stackly_logo_transparent.png" alt="logo" style="height: 40px; width: 80px;">
+      </div>
+
+      <nav class="navigation">
+        <ul class="nav-menu" id="navMenu">
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link" ><span data-i18n="home">Home</span> <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="home.html"><span data-i18n="home1">Home 1</span></a></li>
+              <li><a href="home2.html"><span data-i18n="home2">Home 2</span></a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a href="about.html" class="nav-link"><span data-i18n="about">About</span></a></li>
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link"><span data-i18n="services">Services</span> <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="services.html"><span data-i18n="allServices">All Services</span></a></li>
+              <li><a href="service1.html"><span data-i18n="service_1">Property Buying Assistance</span></a></li>
+              <li><a href="service2.html"><span data-i18n="service_2">Property Selling</span></a></li>
+              <li><a href="service3.html"><span data-i18n="service_3">Rental Services </span></a></li>
+              <li><a href="service4.html"><span data-i18n="service_4">Property Management</span></a></li>
+              <li><a href="service5.html"><span data-i18n="service_5">Real Estate Investment</span></a></li>
+              <li><a href="service6.html"><span data-i18n="service_6">Legal & Documentation Support</span></a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link"><span data-i18n="blog">Blog</span> <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="blog.html"><span data-i18n="allPosts">All Posts</span></a></li>
+              <li><a href="blog1.html"><span data-i18n="blog_1">Smart Property Investments</span></a></li>
+              <li><a href="blog2.html"><span data-i18n="blog_2">Effective Property Management</span></a></li>
+              <li><a href="blog3.html"><span data-i18n="blog_3">Real Estate Market Trends</span></a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a href="contact.html" class="nav-link"><span data-i18n="contact">Contact</span></a></li>
+          
+        </ul>
+        <div class="hamburger" id="hamburger" aria-label="Open menu" tabindex="0">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </nav>
+
+      <div class="lang-switcher">
+        <label for="langSelect"></label>
+        <select id="langSelect" onchange="changeLanguage(this.value)">
+          <option value="en">English</option>
+          <option value="ar">Arabic</option>
+          <option value="he">Hebrew</option>
+        </select>
+      </div>
+
+      <div class="mobile-menu-wrapper">
+        <ul class="hamburger-menu" id="hamburgerMenu">
+          <li class="mobile-dropdown-parent">
+            <span><span data-i18n="home">Home</span> <i class="fas fa-chevron-down"></i></span>
+            <ul class="mobile-dropdown">
+              <li><a href="home.html"><span data-i18n="home1">Home 1</span></a></li>
+              <li><a href="home2.html"><span data-i18n="home2">Home 2</span></a></li>
+            </ul>
+          </li>
+          <li><a href="about.html"><span data-i18n="about">About</span></a></li>
+          <li class="mobile-dropdown-parent">
+            <span><span data-i18n="services">Services</span> <i class="fas fa-chevron-down"></i></span>
+            <ul class="mobile-dropdown">
+             <li><a href="services.html"><span data-i18n="allServices">All Services</span></a></li>
+              <li><a href="service1.html"><span data-i18n="service_1">Property Buying Assistance</span></a></li>
+              <li><a href="service2.html"><span data-i18n="service_2">Property Selling</span></a></li>
+              <li><a href="service3.html"><span data-i18n="service_3">Rental Services </span></a></li>
+              <li><a href="service4.html"><span data-i18n="service_4">Property Management</span></a></li>
+              <li><a href="service5.html"><span data-i18n="service_5">Real Estate Investment</span></a></li>
+              <li><a href="service6.html"><span data-i18n="service6">Legal & Documentation Support</span></a></li>
+            </ul>
+          </li>
+          <li class="mobile-dropdown-parent">
+            <span><span data-i18n="blog">Blog</span> <i class="fas fa-chevron-down"></i></span>
+            <ul class="mobile-dropdown">
+               <li><a href="blog.html"><span data-i18n="allPosts">All Posts</span></a></li>
+                <li><a href="blog1.html"><span data-i18n="blog_1">Smart Property Investments</span></a></li>
+                <li><a href="blog2.html"><span data-i18n="blog_2">Effective Property Management</span></a></li>
+                <li><a href="blog3.html"><span data-i18n="blog_3">Real Estate Market Trends</span></a></li>
+            </ul>
+          </li>
+          <li><a href="contact.html"><span data-i18n="contact">Contact</span></a></li>
+       
+        </ul>
+      </div>
+
+
+
+      <button id="toggleBtn" class="toggle-btn" title="Toggle Theme">
+        <i class="fas fa-moon"></i>
+      </button>
+
+      
+
+
+      <div class="avatar-wrapper">
+  <div class="avatar-circle" title="Profile" id="avatarCircle">
+    <span id="avatarInitials">BA</span>
+  </div>
+  <div class="avatar-dropdown" id="avatarDropdown">
+    <ul>
+      <li>
+          <a href="#" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span data-i18n="logout">Logout</span>
+          </a>
+      </li>
+    </ul>
+  </div>
+</div>
+    </div>
+  </div>
+</header>
+
+  <div class="dashboard-container">
   <!-- Sidebar -->
   <div class="sidebar">
-    <h2>Admin</h2>
-    <a class="menu-link active" data-target="dashboard">Dashboard</a>
-    <a class="menu-link" data-target="users">Users</a>
-    <a class="menu-link" data-target="settings">Settings</a>
-    <a id="logoutBtn">Logout</a>
+      <div class="sidebar-header">
+        <h2><i class="fas fa-building"></i> Stackly Admin</h2>
+        <div class="sidebar-subtitle">Real Estate Management</div>
+      </div>
+      <div class="sidebar-nav">
+        <a class="menu-link active" data-target="dashboard">
+          <i class="fas fa-tachometer-alt"></i> <span data-i18n="dashboard">Dashboard</span>
+        </a>
+        <a class="menu-link" data-target="properties">
+          <i class="fas fa-home"></i> <span data-i18n="properties">Properties</span>
+        </a>
+        <a class="menu-link" data-target="users">
+          <i class="fas fa-users"></i> <span data-i18n="users">Users</span>
+        </a>
+        <a class="menu-link" data-target="agents">
+          <i class="fas fa-user-tie"></i> <span data-i18n="agents">Agents</span>
+        </a>
+        <a class="menu-link" data-target="transactions">
+          <i class="fas fa-handshake"></i> <span data-i18n="transactions">Transactions</span>
+        </a>
+        <a class="menu-link" data-target="reports">
+          <i class="fas fa-chart-bar"></i> <span data-i18n="reports">Reports</span>
+        </a>
+        <a class="menu-link" data-target="settings">
+          <i class="fas fa-cog"></i> <span data-i18n="settings">Settings</span>
+        </a>
+      </div>
   </div>
 
   <!-- Main content -->
   <div class="main-content">
     <!-- Dashboard Section -->
     <div id="dashboard" class="content-section active">
-      <h1>Dashboard Overview</h1>
-      <div class="card">📊 Total Users: <span id="totalUsers">0</span></div>
-      <div class="card">🏡 Properties Managed: 128</div>
-      <div class="card">💼 Active Agents: 12</div>
+      <div class="dashboard-header">
+        <h1 class="dashboard-title" data-i18n="dashboard">Dashboard Overview</h1>
+        <p class="dashboard-subtitle" data-i18n="dashboardWelcome">Welcome to your real estate management dashboard</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon users">
+              <i class="fas fa-users"></i>
+            </div>
+          </div>
+          <div class="stat-value" id="totalUsers">0</div>
+          <div class="stat-label" data-i18n="totalUsers">Total Users</div>
+          <div class="stat-change positive">+12% this month</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon properties">
+              <i class="fas fa-home"></i>
+            </div>
+          </div>
+          <div class="stat-value">247</div>
+          <div class="stat-label" data-i18n="totalProperties">Properties Listed</div>
+          <div class="stat-change positive">+8% this month</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon agents">
+              <i class="fas fa-user-tie"></i>
+            </div>
+          </div>
+          <div class="stat-value">18</div>
+          <div class="stat-label" data-i18n="totalAgents">Active Agents</div>
+          <div class="stat-change positive">+2 new agents</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon revenue">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+          </div>
+          <div class="stat-value">$2.4M</div>
+          <div class="stat-label" data-i18n="monthlyRevenue">Monthly Revenue</div>
+          <div class="stat-change positive">+15% this month</div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-chart-line"></i>
+            <span data-i18n="recentActivity">Recent Activity</span>
+          </h2>
+        </div>
+        <div class="recent-activity">
+          <div class="activity-item">
+            <div class="activity-icon success">
+              <i class="fas fa-check"></i>
+            </div>
+            <div class="activity-content">
+              <div class="activity-title" data-i18n="newPropertyListing">New property listing added</div>
+              <div class="activity-desc" data-i18n="luxuryVillaBeverly">Luxury villa in Beverly Hills - $2.5M</div>
+              <div class="activity-time" data-i18n="twoHoursAgo">2 hours ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon warning">
+              <i class="fas fa-user-plus"></i>
+            </div>
+            <div class="activity-content">
+              <div class="activity-title" data-i18n="newAgentRegistered">New agent registered</div>
+              <div class="activity-desc" data-i18n="sarahJohnsonJoined">Sarah Johnson joined the team</div>
+              <div class="activity-time" data-i18n="fourHoursAgo">4 hours ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon info">
+              <i class="fas fa-handshake"></i>
+            </div>
+            <div class="activity-content">
+              <div class="activity-title" data-i18n="propertySold">Property sold</div>
+              <div class="activity-desc" data-i18n="downtownApartment">Downtown apartment - $850K</div>
+              <div class="activity-time" data-i18n="sixHoursAgo">6 hours ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Properties Section -->
+    <div id="properties" class="content-section">
+      <div class="dashboard-header">
+        <h1 class="dashboard-title" data-i18n="propertyManagement">Property Management</h1>
+        <p class="dashboard-subtitle" data-i18n="manageListings">Manage all your real estate listings</p>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-home"></i>
+            <span data-i18n="propertyListings">Property Listings</span>
+          </h2>
+          <button class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+            <span data-i18n="addNew">Add Property</span>
+          </button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="property">Property</th>
+                <th data-i18n="type">Type</th>
+                <th data-i18n="price">Price</th>
+                <th data-i18n="status">Status</th>
+                <th data-i18n="agent">Agent</th>
+                <th data-i18n="actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="property-info">
+                    <div class="property-name" data-i18n="luxuryVilla">Luxury Villa</div>
+                    <div class="property-location" data-i18n="beverlyHillsCA">Beverly Hills, CA</div>
+                  </div>
+                </td>
+                <td data-i18n="villa">Villa</td>
+                <td>$2,500,000</td>
+                <td><span class="status-badge available" data-i18n="available">Available</span></td>
+                <td>John Smith</td>
+                <td>
+                  <button class="btn btn-secondary" data-i18n="edit">Edit</button>
+                  <button class="btn btn-danger" data-i18n="delete">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="property-info">
+                    <div class="property-name" data-i18n="modernApartment">Modern Apartment</div>
+                    <div class="property-location" data-i18n="downtownNY">Downtown, NY</div>
+                  </div>
+                </td>
+                <td data-i18n="apartment">Apartment</td>
+                <td>$850,000</td>
+                <td><span class="status-badge sold" data-i18n="sold">Sold</span></td>
+                <td>Sarah Johnson</td>
+                <td>
+                  <button class="btn btn-secondary" data-i18n="edit">Edit</button>
+                  <button class="btn btn-danger" data-i18n="delete">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <!-- Users Section -->
     <div id="users" class="content-section">
-      <h1>Users List</h1>
+      <div class="dashboard-header">
+        <h1 class="dashboard-title" data-i18n="userManagement">User Management</h1>
+        <p class="dashboard-subtitle" data-i18n="manageUsersAccounts">Manage registered users and their accounts</p>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-users"></i>
+            <span data-i18n="users">Registered Users</span>
+          </h2>
+          <button class="btn btn-primary">
+            <i class="fas fa-user-plus"></i>
+            <span data-i18n="addNew">Add User</span>
+          </button>
+        </div>
+        <div class="table-container">
       <table id="usersTable">
         <thead>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
+                <th data-i18n="name">Name</th>
+            <th data-i18n="email">Email</th>
+                <th data-i18n="phone">Phone</th>
+                <th data-i18n="registrationDate">Registration Date</th>
+                <th data-i18n="status">Status</th>
+                <th data-i18n="actions">Actions</th>
           </tr>
         </thead>
         <tbody>
           <!-- User rows will be injected here -->
         </tbody>
       </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agents Section -->
+    <div id="agents" class="content-section">
+      <div class="dashboard-header">
+        <h1 class="dashboard-title" data-i18n="agentManagement">Agent Management</h1>
+        <p class="dashboard-subtitle" data-i18n="manageAgentsPerformance">Manage your real estate agents and their performance</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon agents">
+              <i class="fas fa-user-tie"></i>
+            </div>
+          </div>
+          <div class="stat-value">18</div>
+          <div class="stat-label" data-i18n="totalAgents">Total Agents</div>
+          <div class="stat-change positive" data-i18n="plusTwoThisMonth">+2 this month</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon properties">
+              <i class="fas fa-chart-line"></i>
+            </div>
+          </div>
+          <div class="stat-value">15</div>
+          <div class="stat-label" data-i18n="activeListings">Active Listings</div>
+          <div class="stat-change positive" data-i18n="plusFiveThisWeek">+5 this week</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon revenue">
+              <i class="fas fa-trophy"></i>
+            </div>
+          </div>
+          <div class="stat-value">$1.2M</div>
+          <div class="stat-label" data-i18n="totalSales">Total Sales</div>
+          <div class="stat-change positive" data-i18n="plusTwentyPercentThisMonth">+20% this month</div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-user-tie"></i>
+            <span data-i18n="agentPerformance">Agent Performance</span>
+          </h2>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="agent">Agent</th>
+                <th data-i18n="propertiesSold">Properties Sold</th>
+                <th data-i18n="totalValue">Total Value</th>
+                <th data-i18n="commission">Commission</th>
+                <th data-i18n="rating">Rating</th>
+                <th data-i18n="actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="agent-info">
+                    <div class="agent-name">John Smith</div>
+                    <div class="agent-email">john@stackly.com</div>
+                  </div>
+                </td>
+                <td>12</td>
+                <td>$2.1M</td>
+                <td>$63,000</td>
+                <td>
+                  <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <span>4.9</span>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn btn-primary" data-i18n="viewProfile">View Profile</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="agent-info">
+                    <div class="agent-name">Sarah Johnson</div>
+                    <div class="agent-email">sarah@stackly.com</div>
+                  </div>
+                </td>
+                <td>8</td>
+                <td>$1.5M</td>
+                <td>$45,000</td>
+                <td>
+                  <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <span>4.2</span>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn btn-primary" data-i18n="viewProfile">View Profile</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transactions Section -->
+    <div id="transactions" class="content-section">
+      <div class="dashboard-header">
+        <h1 class="dashboard-title" data-i18n="transactionHistory">Transaction Management</h1>
+        <p class="dashboard-subtitle" data-i18n="trackTransactions">Track all property transactions and deals</p>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-handshake"></i>
+            <span data-i18n="recentTransactions">Recent Transactions</span>
+          </h2>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="transactionId">Transaction ID</th>
+                <th data-i18n="property">Property</th>
+                <th data-i18n="buyer">Buyer</th>
+                <th data-i18n="seller">Seller</th>
+                <th data-i18n="amount">Amount</th>
+                <th data-i18n="date">Date</th>
+                <th data-i18n="status">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#TXN-001</td>
+                <td>Luxury Villa, BH</td>
+                <td>Michael Brown</td>
+                <td>David Wilson</td>
+                <td>$2,500,000</td>
+                <td>2024-01-15</td>
+                <td><span class="status-badge completed" data-i18n="completed">Completed</span></td>
+              </tr>
+              <tr>
+                <td>#TXN-002</td>
+                <td>Modern Apartment, NY</td>
+                <td>Emily Davis</td>
+                <td>Robert Taylor</td>
+                <td>$850,000</td>
+                <td>2024-01-14</td>
+                <td><span class="status-badge pending" data-i18n="pending">Pending</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reports Section -->
+    <div id="reports" class="content-section">
+      <div class="dashboard-header">
+        <h1 class="dashboard-title" data-i18n="analyticsReports">Reports & Analytics</h1>
+        <p class="dashboard-subtitle" data-i18n="comprehensiveReports">Comprehensive reports and business insights</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon revenue">
+              <i class="fas fa-chart-pie"></i>
+            </div>
+          </div>
+          <div class="stat-value">$5.2M</div>
+          <div class="stat-label" data-i18n="totalRevenue">Total Revenue</div>
+          <div class="stat-change positive" data-i18n="plusTwentyFivePercentThisQuarter">+25% this quarter</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon properties">
+              <i class="fas fa-chart-bar"></i>
+            </div>
+          </div>
+          <div class="stat-value">89%</div>
+          <div class="stat-label" data-i18n="conversionRate">Conversion Rate</div>
+          <div class="stat-change positive" data-i18n="plusFivePercentThisMonth">+5% this month</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon users">
+              <i class="fas fa-clock"></i>
+            </div>
+          </div>
+          <div class="stat-value">12</div>
+          <div class="stat-label" data-i18n="avgDaysToSell">Avg. Days to Sell</div>
+          <div class="stat-change negative" data-i18n="minusTwoDays">-2 days</div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-chart-line"></i>
+            <span data-i18n="monthlyPerformance">Monthly Performance</span>
+          </h2>
+        </div>
+        <div class="chart-placeholder">
+          <div class="chart-info">
+            <h3 data-i18n="salesPerformanceChart">Sales Performance Chart</h3>
+            <p data-i18n="monthlySalesData">Monthly sales data and trends will be displayed here</p>
+            <button class="btn btn-primary" data-i18n="generateReport">Generate Report</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Settings Section -->
     <div id="settings" class="content-section">
-      <h1>Settings</h1>
-      <div class="card">⚙️ Change Password</div>
-      <div class="card">🌐 Language Preferences</div>
-      <div class="card">🔔 Notification Settings</div>
+      <div class="dashboard-header">
+        <h1 class="dashboard-title" data-i18n="systemSettings">System Settings</h1>
+        <p class="dashboard-subtitle" data-i18n="configureDashboardPreferences">Configure your dashboard and system preferences</p>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-cog"></i>
+            General Settings
+          </h2>
+        </div>
+        <div class="settings-grid">
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3 data-i18n="companyInformation">Company Information</h3>
+              <p data-i18n="updateCompanyDetails">Update your company details and branding</p>
+            </div>
+            <button class="btn btn-primary" data-i18n="edit">Edit</button>
+          </div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3 data-i18n="emailNotifications">Email Notifications</h3>
+              <p data-i18n="configureEmailAlerts">Configure email alerts and notifications</p>
+            </div>
+            <button class="btn btn-primary" data-i18n="edit">Configure</button>
+          </div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3 data-i18n="securitySettings">Security Settings</h3>
+              <p data-i18n="managePasswords">Manage passwords and security preferences</p>
+            </div>
+            <button class="btn btn-primary" data-i18n="edit">Update</button>
+          </div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3 data-i18n="backupExport">Backup & Export</h3>
+              <p data-i18n="exportData">Export data and create system backups</p>
+            </div>
+            <button class="btn btn-primary" data-i18n="export">Export</button>
+          </div>
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 
   <script>
+    // Language translations
+    const translations = {
+      en: {
+        // Navigation
+        home: "Home",
+        home1: "Home 1",
+        home2: "Home 2",
+        about: "About",
+        services: "Services",
+        allServices: "All Services",
+        service_1: "Property Buying Assistance",
+        service_2: "Property Selling",
+        service_3: "Rental Services",
+        service_4: "Property Management",
+        service_5: "Real Estate Investment",
+        service_6: "Legal & Documentation Support",
+        blog: "Blog",
+        allPosts: "All Posts",
+        blog_1: "Smart Property Investments",
+        blog_2: "Effective Property Management",
+        blog_3: "Real Estate Market Trends",
+        contact: "Contact",
+        logout: "Logout",
+        
+        // Admin Dashboard
+        dashboard: "Dashboard",
+        properties: "Properties",
+        users: "Users",
+        agents: "Agents",
+        transactions: "Transactions",
+        reports: "Reports",
+        settings: "Settings",
+        totalProperties: "Total Properties",
+        activeListings: "Active Listings",
+        totalUsers: "Total Users",
+        totalAgents: "Total Agents",
+        monthlyRevenue: "Monthly Revenue",
+        recentActivity: "Recent Activity",
+        propertyListings: "Property Listings",
+        userManagement: "User Management",
+        agentManagement: "Agent Management",
+        transactionHistory: "Transaction History",
+        analyticsReports: "Analytics & Reports",
+        systemSettings: "System Settings",
+        viewAll: "View All",
+        addNew: "Add New",
+        edit: "Edit",
+        delete: "Delete",
+        viewProfile: "View Profile",
+        status: "Status",
+        active: "Active",
+        inactive: "Inactive",
+        pending: "Pending",
+        completed: "Completed",
+        name: "Name",
+        email: "Email",
+        phone: "Phone",
+        role: "Role",
+        registrationDate: "Registration Date",
+        actions: "Actions",
+        search: "Search",
+        filter: "Filter",
+        export: "Export",
+        import: "Import",
+        save: "Save",
+        cancel: "Cancel",
+        confirm: "Confirm",
+        yes: "Yes",
+        no: "No",
+        registeredUsers: "Registered Users",
+        companyInformation: "Company Information",
+        emailNotifications: "Email Notifications",
+        updateCompanyDetails: "Update your company details and branding",
+        configureEmailAlerts: "Configure email alerts and notifications",
+        securitySettings: "Security Settings",
+        managePasswords: "Manage passwords and security preferences",
+        backupExport: "Backup & Export",
+        exportData: "Export data and create system backups",
+        newPropertyListing: "New property listing added",
+        luxuryVillaBeverly: "Luxury villa in Beverly Hills - $2.5M",
+        twoHoursAgo: "2 hours ago",
+        newAgentRegistered: "New agent registered",
+        sarahJohnsonJoined: "Sarah Johnson joined the team",
+        fourHoursAgo: "4 hours ago",
+        propertySold: "Property sold",
+        downtownApartment: "Downtown apartment - $850K",
+        sixHoursAgo: "6 hours ago",
+        dashboardWelcome: "Welcome to your real estate management dashboard",
+        propertyManagement: "Property Management",
+        manageListings: "Manage all your real estate listings",
+        property: "Property",
+        type: "Type",
+        price: "Price",
+        agent: "Agent",
+        luxuryVilla: "Luxury Villa",
+        beverlyHillsCA: "Beverly Hills, CA",
+        villa: "Villa",
+        modernApartment: "Modern Apartment",
+        downtownNY: "Downtown, NY",
+        apartment: "Apartment",
+        sold: "Sold",
+        manageUsersAccounts: "Manage registered users and their accounts",
+        manageAgentsPerformance: "Manage your real estate agents and their performance",
+        plusTwoThisMonth: "+2 this month",
+        plusFiveThisWeek: "+5 this week",
+        totalSales: "Total Sales",
+        plusTwentyPercentThisMonth: "+20% this month",
+        agentPerformance: "Agent Performance",
+        propertiesSold: "Properties Sold",
+        totalValue: "Total Value",
+        commission: "Commission",
+        rating: "Rating",
+        trackTransactions: "Track all property transactions and deals",
+        recentTransactions: "Recent Transactions",
+        transactionId: "Transaction ID",
+        buyer: "Buyer",
+        seller: "Seller",
+        amount: "Amount",
+        date: "Date",
+        comprehensiveReports: "Comprehensive reports and business insights",
+        totalRevenue: "Total Revenue",
+        plusTwentyFivePercentThisQuarter: "+25% this quarter",
+        conversionRate: "Conversion Rate",
+        plusFivePercentThisMonth: "+5% this month",
+        avgDaysToSell: "Avg. Days to Sell",
+        minusTwoDays: "-2 days",
+        monthlyPerformance: "Monthly Performance",
+        salesPerformanceChart: "Sales Performance Chart",
+        monthlySalesData: "Monthly sales data and trends will be displayed here",
+        generateReport: "Generate Report",
+        configureDashboardPreferences: "Configure your dashboard and system preferences"
+      },
+      ar: {
+        // Navigation
+        home: "الرئيسية",
+        home1: "الرئيسية 1",
+        home2: "الرئيسية 2",
+        about: "حول",
+        services: "الخدمات",
+        allServices: "جميع الخدمات",
+        service_1: "مساعدة في شراء العقارات",
+        service_2: "بيع العقارات",
+        service_3: "خدمات الإيجار",
+        service_4: "إدارة العقارات",
+        service_5: "الاستثمار العقاري",
+        service_6: "الدعم القانوني والوثائقي",
+        blog: "المدونة",
+        allPosts: "جميع المنشورات",
+        blog_1: "الاستثمارات العقارية الذكية",
+        blog_2: "إدارة العقارات الفعالة",
+        blog_3: "اتجاهات سوق العقارات",
+        contact: "اتصل بنا",
+        logout: "تسجيل الخروج",
+        
+        // Admin Dashboard
+        dashboard: "لوحة التحكم",
+        properties: "العقارات",
+        users: "المستخدمون",
+        agents: "الوكلاء",
+        transactions: "المعاملات",
+        reports: "التقارير",
+        settings: "الإعدادات",
+        totalProperties: "إجمالي العقارات",
+        activeListings: "القوائم النشطة",
+        totalUsers: "إجمالي المستخدمين",
+        totalAgents: "إجمالي الوكلاء",
+        monthlyRevenue: "الإيرادات الشهرية",
+        recentActivity: "النشاط الأخير",
+        propertyListings: "قوائم العقارات",
+        userManagement: "إدارة المستخدمين",
+        agentManagement: "إدارة الوكلاء",
+        transactionHistory: "تاريخ المعاملات",
+        analyticsReports: "التحليلات والتقارير",
+        systemSettings: "إعدادات النظام",
+        viewAll: "عرض الكل",
+        addNew: "إضافة جديد",
+        edit: "تعديل",
+        delete: "حذف",
+        viewProfile: "عرض الملف الشخصي",
+        status: "الحالة",
+        active: "نشط",
+        inactive: "غير نشط",
+        pending: "في الانتظار",
+        completed: "مكتمل",
+        name: "الاسم",
+        email: "البريد الإلكتروني",
+        phone: "الهاتف",
+        role: "الدور",
+        registrationDate: "تاريخ التسجيل",
+        actions: "الإجراءات",
+        search: "بحث",
+        filter: "تصفية",
+        export: "تصدير",
+        import: "استيراد",
+        save: "حفظ",
+        cancel: "إلغاء",
+        confirm: "تأكيد",
+        yes: "نعم",
+        no: "لا",
+        registeredUsers: "المستخدمون المسجلون",
+        companyInformation: "معلومات الشركة",
+        emailNotifications: "إشعارات البريد الإلكتروني",
+        updateCompanyDetails: "تحديث تفاصيل الشركة والعلامة التجارية",
+        configureEmailAlerts: "تكوين تنبيهات البريد الإلكتروني والإشعارات",
+        securitySettings: "إعدادات الأمان",
+        managePasswords: "إدارة كلمات المرور وتفضيلات الأمان",
+        backupExport: "النسخ الاحتياطي والتصدير",
+        exportData: "تصدير البيانات وإنشاء نسخ احتياطية للنظام",
+        newPropertyListing: "تم إضافة قائمة عقارية جديدة",
+        luxuryVillaBeverly: "فيلا فاخرة في بيفرلي هيلز - 2.5 مليون دولار",
+        twoHoursAgo: "منذ ساعتين",
+        newAgentRegistered: "تم تسجيل وكيل جديد",
+        sarahJohnsonJoined: "انضمت سارة جونسون إلى الفريق",
+        fourHoursAgo: "منذ 4 ساعات",
+        propertySold: "تم بيع العقار",
+        downtownApartment: "شقة في وسط المدينة - 850 ألف دولار",
+        sixHoursAgo: "منذ 6 ساعات",
+        dashboardWelcome: "مرحباً بك في لوحة تحكم إدارة العقارات",
+        propertyManagement: "إدارة العقارات",
+        manageListings: "إدارة جميع قوائم العقارات الخاصة بك",
+        property: "العقار",
+        type: "النوع",
+        price: "السعر",
+        agent: "الوكيل",
+        luxuryVilla: "فيلا فاخرة",
+        beverlyHillsCA: "بيفرلي هيلز، كاليفورنيا",
+        villa: "فيلا",
+        modernApartment: "شقة عصرية",
+        downtownNY: "وسط المدينة، نيويورك",
+        apartment: "شقة",
+        sold: "مباع",
+        manageUsersAccounts: "إدارة المستخدمين المسجلين وحساباتهم",
+        manageAgentsPerformance: "إدارة وكلاء العقارات وأدائهم",
+        plusTwoThisMonth: "+2 هذا الشهر",
+        plusFiveThisWeek: "+5 هذا الأسبوع",
+        totalSales: "إجمالي المبيعات",
+        plusTwentyPercentThisMonth: "+20% هذا الشهر",
+        agentPerformance: "أداء الوكلاء",
+        propertiesSold: "العقارات المباعة",
+        totalValue: "القيمة الإجمالية",
+        commission: "العمولة",
+        rating: "التقييم",
+        trackTransactions: "تتبع جميع معاملات العقارات والصفقات",
+        recentTransactions: "المعاملات الأخيرة",
+        transactionId: "رقم المعاملة",
+        buyer: "المشتري",
+        seller: "البائع",
+        amount: "المبلغ",
+        date: "التاريخ",
+        comprehensiveReports: "تقارير شاملة ورؤى الأعمال",
+        totalRevenue: "إجمالي الإيرادات",
+        plusTwentyFivePercentThisQuarter: "+25% هذا الربع",
+        conversionRate: "معدل التحويل",
+        plusFivePercentThisMonth: "+5% هذا الشهر",
+        avgDaysToSell: "متوسط الأيام للبيع",
+        minusTwoDays: "-2 أيام",
+        monthlyPerformance: "الأداء الشهري",
+        salesPerformanceChart: "مخطط أداء المبيعات",
+        monthlySalesData: "بيانات المبيعات الشهرية والاتجاهات ستظهر هنا",
+        generateReport: "إنشاء تقرير",
+        configureDashboardPreferences: "قم بتكوين لوحة التحكم والتفضيلات الخاصة بالنظام"
+      },
+      he: {
+        // Navigation
+        home: "בית",
+        home1: "בית 1",
+        home2: "בית 2",
+        about: "אודות",
+        services: "שירותים",
+        allServices: "כל השירותים",
+        service_1: "סיוע ברכישת נכסים",
+        service_2: "מכירת נכסים",
+        service_3: "שירותי השכרה",
+        service_4: "ניהול נכסים",
+        service_5: "השקעות נדלן",
+        service_6: "תמיכה משפטית ותיעודית",
+        blog: "בלוג",
+        allPosts: "כל הפוסטים",
+        blog_1: "השקעות נדלן חכמות",
+        blog_2: "ניהול נכסים יעיל",
+        blog_3: "מגמות שוק הנדלן",
+        contact: "צור קשר",
+        logout: "התנתק",
+        
+        // Admin Dashboard
+        dashboard: "לוח בקרה",
+        properties: "נכסים",
+        users: "משתמשים",
+        agents: "סוכנים",
+        transactions: "עסקאות",
+        reports: "דוחות",
+        settings: "הגדרות",
+        totalProperties: "סה\"כ נכסים",
+        activeListings: "רשימות פעילות",
+        totalUsers: "סה\"כ משתמשים",
+        totalAgents: "סה\"כ סוכנים",
+        monthlyRevenue: "הכנסה חודשית",
+        recentActivity: "פעילות אחרונה",
+        propertyListings: "רשימות נכסים",
+        userManagement: "ניהול משתמשים",
+        agentManagement: "ניהול סוכנים",
+        transactionHistory: "היסטוריית עסקאות",
+        analyticsReports: "ניתוחים ודוחות",
+        systemSettings: "הגדרות מערכת",
+        viewAll: "הצג הכל",
+        addNew: "הוסף חדש",
+        edit: "ערוך",
+        delete: "מחק",
+        viewProfile: "הצג פרופיל",
+        status: "סטטוס",
+        active: "פעיל",
+        inactive: "לא פעיל",
+        pending: "ממתין",
+        completed: "הושלם",
+        name: "שם",
+        email: "אימייל",
+        phone: "טלפון",
+        role: "תפקיד",
+        registrationDate: "תאריך רישום",
+        actions: "פעולות",
+        search: "חיפוש",
+        filter: "סינון",
+        export: "ייצוא",
+        import: "יבוא",
+        save: "שמור",
+        cancel: "בטל",
+        confirm: "אשר",
+        yes: "כן",
+        no: "לא",
+        registeredUsers: "משתמשים רשומים",
+        companyInformation: "מידע על החברה",
+        emailNotifications: "התראות אימייל",
+        updateCompanyDetails: "עדכן את פרטי החברה והמותג",
+        configureEmailAlerts: "הגדר התראות אימייל והתראות",
+        securitySettings: "הגדרות אבטחה",
+        managePasswords: "נהל סיסמאות והעדפות אבטחה",
+        backupExport: "גיבוי וייצוא",
+        exportData: "ייצא נתונים וצור גיבויים של המערכת",
+        newPropertyListing: "נוספה רשימת נכס חדשה",
+        luxuryVillaBeverly: "וילה מפוארת בבוורלי הילס - 2.5 מיליון דולר",
+        twoHoursAgo: "לפני שעתיים",
+        newAgentRegistered: "נרשם סוכן חדש",
+        sarahJohnsonJoined: "שרה ג'ונסון הצטרפה לצוות",
+        fourHoursAgo: "לפני 4 שעות",
+        propertySold: "הנכס נמכר",
+        downtownApartment: "דירה במרכז העיר - 850 אלף דולר",
+        sixHoursAgo: "לפני 6 שעות",
+        dashboardWelcome: "ברוכים הבאים ללוח הבקרה לניהול נדלן",
+        propertyManagement: "ניהול נכסים",
+        manageListings: "נהל את כל רשימות הנדלן שלך",
+        property: "נכס",
+        type: "סוג",
+        price: "מחיר",
+        agent: "סוכן",
+        luxuryVilla: "וילה מפוארת",
+        beverlyHillsCA: "בוורלי הילס, קליפורניה",
+        villa: "וילה",
+        modernApartment: "דירה מודרנית",
+        downtownNY: "מרכז העיר, ניו יורק",
+        apartment: "דירה",
+        sold: "נמכר",
+        manageUsersAccounts: "נהל משתמשים רשומים והחשבונות שלהם",
+        manageAgentsPerformance: "נהל סוכני נדלן והביצועים שלהם",
+        plusTwoThisMonth: "+2 החודש",
+        plusFiveThisWeek: "+5 השבוע",
+        totalSales: "סה\"כ מכירות",
+        plusTwentyPercentThisMonth: "+20% החודש",
+        agentPerformance: "ביצועי סוכנים",
+        propertiesSold: "נכסים שנמכרו",
+        totalValue: "ערך כולל",
+        commission: "עמלה",
+        rating: "דירוג",
+        trackTransactions: "עקוב אחר כל עסקאות הנדלן והעסקאות",
+        recentTransactions: "עסקאות אחרונות",
+        transactionId: "מספר עסקה",
+        buyer: "קונה",
+        seller: "מוכר",
+        amount: "סכום",
+        date: "תאריך",
+        comprehensiveReports: "דוחות מקיפים ותובנות עסקיות",
+        totalRevenue: "סה\"כ הכנסות",
+        plusTwentyFivePercentThisQuarter: "+25% הרבעון",
+        conversionRate: "שיעור המרה",
+        plusFivePercentThisMonth: "+5% החודש",
+        avgDaysToSell: "ממוצע ימים למכירה",
+        minusTwoDays: "-2 ימים",
+        monthlyPerformance: "ביצועים חודשיים",
+        salesPerformanceChart: "תרשים ביצועי מכירות",
+        monthlySalesData: "נתוני מכירות חודשיים ומגמות יוצגו כאן",
+        generateReport: "צור דוח",
+        configureDashboardPreferences: "הגדר את לוח הבקרה וההעדפות של המערכת"
+      }
+    };
+
+    // Function to change language
+    function changeLanguage(lang) {
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if(translations[lang] && translations[lang][key]) {
+          el.innerText = translations[lang][key];
+        }
+      });
+
+      // Handle RTL for Arabic & Hebrew - but keep header layout consistent
+      if(lang === "ar" || lang === "he") {
+        document.documentElement.dir = "rtl";
+        // Override RTL for header to maintain consistent layout
+        document.querySelector('.header').style.direction = "ltr";
+        // Force avatar dropdown to stay in same position
+        const avatarDropdown = document.querySelector('.avatar-dropdown');
+        if(avatarDropdown) {
+          avatarDropdown.style.right = "0px";
+          avatarDropdown.style.left = "auto";
+        }
+      } else {
+        document.documentElement.dir = "ltr";
+        // Ensure header direction is LTR
+        document.querySelector('.header').style.direction = "ltr";
+        // Force avatar dropdown to stay in same position
+        const avatarDropdown = document.querySelector('.avatar-dropdown');
+        if(avatarDropdown) {
+          avatarDropdown.style.right = "0px";
+          avatarDropdown.style.left = "auto";
+        }
+      }
+    }
+
+    // Mobile menu setup
+    const headerHamburger = document.getElementById('hamburger');
+    const hamburgerMenu = document.getElementById('hamburgerMenu');
+
+    if (headerHamburger && hamburgerMenu) {
+      headerHamburger.addEventListener('click', () => {
+        headerHamburger.classList.toggle('active');
+        hamburgerMenu.classList.toggle('active');
+      });
+    }
+
+    // Dropdown functionality
+    document.querySelectorAll('.nav-item.dropdown').forEach(item => {
+      const link = item.querySelector('.nav-link');
+      const dropdown = item.querySelector('.dropdown-menu');
+      
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        dropdown.classList.toggle('active');
+      });
+    });
+
+    // Mobile dropdown functionality
+    document.querySelectorAll('.mobile-dropdown-parent').forEach(parent => {
+      const span = parent.querySelector('span');
+      const dropdown = parent.querySelector('.mobile-dropdown');
+      
+      span.addEventListener('click', () => {
+        dropdown.classList.toggle('active');
+      });
+    });
+
+    // Enhanced theme toggle functionality
+    const toggleBtn = document.getElementById('toggleBtn');
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+    function applyTheme(isDark) {
+      if (isDark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+      }
+    }
+
+    // Apply saved theme on load
+    applyTheme(isDarkMode);
+
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const isDark = currentTheme === 'dark';
+      const newTheme = !isDark;
+      
+      applyTheme(newTheme);
+      localStorage.setItem('darkMode', newTheme);
+    });
+
+    // Avatar functionality - Click to toggle dropdown
+    const avatarCircle = document.getElementById('avatarCircle');
+    const avatarDropdown = document.getElementById('avatarDropdown');
+
+    console.log('Avatar elements found:', { avatarCircle, avatarDropdown });
+
+    if (avatarCircle && avatarDropdown) {
+      // Toggle dropdown on avatar click
+      avatarCircle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        console.log('Avatar clicked, toggling dropdown');
+        avatarDropdown.classList.toggle('active');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!avatarCircle.contains(e.target) && !avatarDropdown.contains(e.target)) {
+          avatarDropdown.classList.remove('active');
+        }
+      });
+
+      // Prevent dropdown from closing when clicking inside it
+      avatarDropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    }
+
+    // Enhanced Logout functionality
+    const logoutBtn = document.getElementById('logoutBtn');
+    console.log('Logout button found:', logoutBtn);
+    
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Logout button clicked');
+        
+        // Show confirmation
+        if (confirm('Are you sure you want to logout?')) {
+          console.log('User confirmed logout');
+          localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('currentUser');
+          window.location.href = 'index.html';
+        }
+      });
+    } else {
+      console.error('Logout button not found!');
+    }
+
+
+    // Optional: automatically switch to selected language on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      const langSelect = document.getElementById("langSelect");
+      changeLanguage(langSelect.value);
+    });
+
     // Fetch users from localStorage
     const users = JSON.parse(localStorage.getItem("users")) || {};
     const tbody = document.querySelector("#usersTable tbody");
     tbody.innerHTML = "";
 
-    Object.entries(users).forEach(([email, user]) => {
+    // Add admin user to the users list
+    const adminUser = {
+      'admin@enkonix.in': { 
+        firstName: 'Admin', 
+        lastName: 'User', 
+        phone: '+1 (555) 000-0000',
+        role: 'Administrator',
+        isAdmin: true
+      }
+    };
+
+    // Merge admin user with existing users
+    const allUsers = { ...adminUser, ...users };
+
+    // Add sample users if none exist (excluding admin)
+    if (Object.keys(users).length === 0) {
+      const sampleUsers = {
+        'john.doe@example.com': { firstName: 'John', lastName: 'Doe', phone: '+1 (555) 123-4567' },
+        'jane.smith@example.com': { firstName: 'Jane', lastName: 'Smith', phone: '+1 (555) 234-5678' },
+        'mike.johnson@example.com': { firstName: 'Mike', lastName: 'Johnson', phone: '+1 (555) 345-6789' }
+      };
+      
+      Object.entries(sampleUsers).forEach(([email, user]) => {
+        allUsers[email] = user;
+      });
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+
+    // Display all users including admin
+    Object.entries(allUsers).forEach(([email, user]) => {
       const row = document.createElement("tr");
+      const registrationDate = user.isAdmin ? '2024-01-01' : new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toLocaleDateString();
+      const status = user.isAdmin ? 'Active' : (Math.random() > 0.3 ? 'Active' : 'Inactive');
+      const isAdminRow = user.isAdmin;
+      
       row.innerHTML = `
-        <td>${user.firstName || ""}</td>
-        <td>${user.lastName || ""}</td>
+        <td>
+          <div class="user-info">
+            <div class="user-name">
+              ${user.firstName || ""} ${user.lastName || ""}
+              ${isAdminRow ? '<span class="admin-badge">ADMIN</span>' : ''}
+            </div>
+            <div class="user-email">${email}</div>
+          </div>
+        </td>
         <td>${email}</td>
+        <td>${user.phone || 'N/A'}</td>
+        <td>${registrationDate}</td>
+        <td><span class="status-badge ${status.toLowerCase()}" data-i18n="${status.toLowerCase()}">${status}</span></td>
+        <td>
+          ${isAdminRow ? 
+            '<button class="btn btn-primary" data-i18n="viewProfile">View Profile</button>' : 
+            '<button class="btn btn-secondary" data-i18n="edit">Edit</button><button class="btn btn-danger" data-i18n="delete">Delete</button>'
+          }
+        </td>
       `;
+      
+      // Add special styling for admin row
+      if (isAdminRow) {
+        row.style.background = 'rgba(166, 142, 76, 0.05)';
+        row.style.borderLeft = '4px solid var(--primary-color)';
+      }
+      
       tbody.appendChild(row);
     });
 
-    // Dashboard total users count
-    document.getElementById("totalUsers").textContent = Object.keys(users).length;
+    // Dashboard total users count (including admin)
+    document.getElementById("totalUsers").textContent = Object.keys(allUsers).length;
 
-    // Sidebar navigation
+    // Enhanced sidebar navigation
     const links = document.querySelectorAll(".menu-link");
     const sections = document.querySelectorAll(".content-section");
 
@@ -172,16 +2092,35 @@
         // Activate clicked link and target section
         link.classList.add("active");
         const target = link.getAttribute("data-target");
-        document.getElementById(target).classList.add("active");
+        const targetSection = document.getElementById(target);
+        
+        if (targetSection) {
+          targetSection.classList.add("active");
+          
+          // Add smooth scroll to top when switching sections
+          targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       });
     });
 
-    // Logout logic
-    document.getElementById("logoutBtn").onclick = function() {
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("currentUser");
-      window.location.href = "index.html";
-    };
+    // Add mobile sidebar toggle functionality
+    const sidebarHamburger = document.getElementById('hamburger');
+    const sidebar = document.querySelector('.sidebar');
+
+    if (sidebarHamburger && sidebar) {
+      sidebarHamburger.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+      });
+
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && 
+            !sidebar.contains(e.target) && 
+            !sidebarHamburger.contains(e.target)) {
+          sidebar.classList.remove('active');
+        }
+      });
+    }
   </script>
 </body>
 </html>
