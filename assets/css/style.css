@@ -1286,4 +1286,246 @@ body:not(.dark-mode) .hamburger span {
 
    /* left and right padding for header */
 
+/* Social Media Brand Colors - Global Styles */
+.footer .social-links a[href*="facebook"],
+.social-links a[href*="facebook"] {
+  background: #1877f2 !important;
+  color: #ffffff !important;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+.footer .social-links a[href*="facebook"]:hover,
+.social-links a[href*="facebook"]:hover {
+  background: #166fe5 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+.footer .social-links a[href*="twitter"],
+.social-links a[href*="twitter"] {
+  background: #1da1f2 !important;
+  color: #ffffff !important;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+.footer .social-links a[href*="twitter"]:hover,
+.social-links a[href*="twitter"]:hover {
+  background: #0d8bd9 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+.footer .social-links a[href*="linkedin"],
+.social-links a[href*="linkedin"] {
+  background: #0077b5 !important;
+  color: #ffffff !important;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+.footer .social-links a[href*="linkedin"]:hover,
+.social-links a[href*="linkedin"]:hover {
+  background: #005885 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+.footer .social-links a[href*="instagram"],
+.social-links a[href*="instagram"] {
+  background: #e4405f !important;
+  color: #ffffff !important;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+.footer .social-links a[href*="instagram"]:hover,
+.social-links a[href*="instagram"]:hover {
+  background: #c13584 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+/* Dark mode social colors - Global Styles */
+body.dark-mode .footer .social-links a[href*="facebook"],
+body.dark-mode .social-links a[href*="facebook"] {
+  background: #1877f2 !important;
+  color: #ffffff !important;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+body.dark-mode .footer .social-links a[href*="facebook"]:hover,
+body.dark-mode .social-links a[href*="facebook"]:hover {
+  background: #166fe5 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .footer .social-links a[href*="twitter"],
+body.dark-mode .social-links a[href*="twitter"] {
+  background: #1da1f2 !important;
+  color: #ffffff !important;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+body.dark-mode .footer .social-links a[href*="twitter"]:hover,
+body.dark-mode .social-links a[href*="twitter"]:hover {
+  background: #0d8bd9 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .footer .social-links a[href*="linkedin"],
+body.dark-mode .social-links a[href*="linkedin"] {
+  background: #0077b5 !important;
+  color: #ffffff !important;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+body.dark-mode .footer .social-links a[href*="linkedin"]:hover,
+body.dark-mode .social-links a[href*="linkedin"]:hover {
+  background: #005885 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .footer .social-links a[href*="instagram"],
+body.dark-mode .social-links a[href*="instagram"] {
+  background: #e4405f !important;
+  color: #ffffff !important;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+body.dark-mode .footer .social-links a[href*="instagram"]:hover,
+body.dark-mode .social-links a[href*="instagram"]:hover {
+  background: #c13584 !important;
+  color: #ffffff !important;
+}
+
+/* Global Button Styling - All Buttons */
+.btn,
+button,
+input[type="button"],
+input[type="submit"],
+.cta-button,
+.hero-button,
+.primary-button,
+.secondary-button,
+.submit-button,
+.action-button {
+  background: #0b1945 !important;
+  color: #ffffff !important;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+.btn:hover,
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+.cta-button:hover,
+.hero-button:hover,
+.primary-button:hover,
+.secondary-button:hover,
+.submit-button:hover,
+.action-button:hover {
+  background: #0a1538 !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(11, 25, 69, 0.3);
+}
+
+/* Specific Button Classes */
+.btn-primary,
+a.btn-primary,
+a.btn.btn-primary {
+  background: #0b1945 !important;
+  color: #ffffff !important;
+  border: none !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  padding: 12px 24px !important;
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-primary:hover,
+a.btn-primary:hover,
+a.btn.btn-primary:hover {
+  background: #0a1538 !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(11, 25, 69, 0.3) !important;
+  text-decoration: none !important;
+}
+
+.btn-secondary {
+  background: #0b1945 !important;
+  color: #ffffff !important;
+}
+
+.btn-secondary:hover {
+  background: #0a1538 !important;
+  color: #ffffff !important;
+}
+
+/* Dark Mode Button Styling */
+body.dark-mode .btn,
+body.dark-mode button,
+body.dark-mode input[type="button"],
+body.dark-mode input[type="submit"],
+body.dark-mode .cta-button,
+body.dark-mode .hero-button,
+body.dark-mode .primary-button,
+body.dark-mode .secondary-button,
+body.dark-mode .submit-button,
+body.dark-mode .action-button {
+  background: #0b1945 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .btn:hover,
+body.dark-mode button:hover,
+body.dark-mode input[type="button"]:hover,
+body.dark-mode input[type="submit"]:hover,
+body.dark-mode .cta-button:hover,
+body.dark-mode .hero-button:hover,
+body.dark-mode .primary-button:hover,
+body.dark-mode .secondary-button:hover,
+body.dark-mode .submit-button:hover,
+body.dark-mode .action-button:hover {
+  background: #0a1538 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .btn-primary,
+body.dark-mode a.btn-primary,
+body.dark-mode a.btn.btn-primary {
+  background: #0b1945 !important;
+  color: #ffffff !important;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+body.dark-mode .btn-primary:hover,
+body.dark-mode a.btn-primary:hover,
+body.dark-mode a.btn.btn-primary:hover {
+  background: #0a1538 !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+body.dark-mode .btn-secondary {
+  background: #0b1945 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .btn-secondary:hover {
+  background: #0a1538 !important;
+  color: #ffffff !important;
+}
+
    

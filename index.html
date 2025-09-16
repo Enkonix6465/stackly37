@@ -30,6 +30,12 @@
       box-sizing: border-box;
     }
 
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -39,6 +45,8 @@
       justify-content: center;
       position: relative;
       overflow: hidden;
+      padding: 0;
+      margin: 0;
     }
 
     /* Animated background elements */
@@ -52,6 +60,7 @@
       background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
       animation: float 20s ease-in-out infinite;
       pointer-events: none;
+      z-index: 0;
     }
 
     @keyframes float {
@@ -71,6 +80,8 @@
       overflow: hidden;
       position: relative;
       z-index: 1;
+      margin: 20px;
+      min-height: 600px;
     }
 
     /* Left side - Branding */
@@ -86,6 +97,7 @@
       color: white;
       position: relative;
       overflow: hidden;
+      min-height: 500px;
     }
 
     .branding-section::before {
@@ -159,6 +171,8 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      min-height: 500px;
+      background: white;
     }
 
     .form-container {
@@ -167,6 +181,7 @@
       margin: 0 auto;
       display: none;
       animation: slideIn 0.5s ease-out;
+      padding-bottom: 20px;
     }
 
     .form-container.active {
@@ -206,6 +221,12 @@
       margin: 0 auto 20px;
       color: white;
       font-size: 24px;
+    }
+
+    .form-icon img {
+      max-width: 100%;
+      height: auto;
+      filter: brightness(0) invert(1);
     }
 
     /* Form elements */
@@ -335,6 +356,11 @@
       text-align: center;
       font-weight: 600;
       border-left: 4px solid var(--danger-color);
+      display: none;
+    }
+
+    .error.show {
+      display: block;
     }
 
     .success {
@@ -348,39 +374,593 @@
       border-left: 4px solid var(--success-color);
     }
 
-    /* Responsive design */
-    @media (max-width: 768px) {
+    /* Large Desktop Responsive Design */
+    @media (max-width: 1400px) {
       .auth-container {
-        flex-direction: column;
+        max-width: 1100px;
         margin: 20px;
-        border-radius: 16px;
       }
 
       .branding-section {
-        padding: 40px 20px;
+        padding: 50px 35px;
       }
 
       .form-section {
-        padding: 40px 20px;
-      }
-
-      .brand-title {
-        font-size: 28px;
-      }
-
-      .form-title {
-        font-size: 24px;
+        padding: 50px 35px;
       }
     }
 
-    @media (max-width: 480px) {
+    /* Tablet Responsive Design */
+    @media (max-width: 1024px) {
+      body {
+        padding: 0;
+        margin: 0;
+        min-height: 100vh;
+        display: block;
+        overflow-x: hidden;
+        width: 100%;
+      }
+
       .auth-container {
-        margin: 10px;
+        flex-direction: column;
+        margin: 0;
+        border-radius: 0;
+        min-height: 100vh;
+        height: auto;
+        width: 100vw;
+        max-width: 100vw;
+        box-shadow: none;
+        display: flex;
+      }
+
+      .branding-section {
+        padding: 60px 30px;
+        order: 2;
+        border-radius: 0 0 20px 20px;
+        min-height: auto;
+        flex: none;
+      }
+
+      .form-section {
+        padding: 60px 30px;
+        order: 1;
+        border-radius: 20px 20px 0 0;
+        min-height: auto;
+        flex: none;
+      }
+
+      .brand-title {
+        font-size: 36px;
+        margin-bottom: 20px;
+      }
+
+      .brand-subtitle {
+        font-size: 18px;
+        margin-bottom: 30px;
+      }
+
+      .form-title {
+        font-size: 30px;
+        margin-bottom: 20px;
+      }
+
+      .form-subtitle {
+        font-size: 16px;
+        margin-bottom: 30px;
+      }
+
+      .brand-features li {
+        font-size: 16px;
+        margin-bottom: 16px;
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 25px;
+      }
+
+      .logo i {
+        font-size: 40px;
+      }
+
+      .form-icon {
+        width: 65px;
+        height: 65px;
+        margin-bottom: 20px;
+      }
+
+      .form-icon img {
+        height: 32px;
+        width: 50px;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      .form-group label {
+        font-size: 15px;
+        margin-bottom: 8px;
+      }
+
+      .form-group input {
+        padding: 16px 20px 16px 45px;
+        font-size: 15px;
+        border-radius: 10px;
+      }
+
+      .form-group .input-icon {
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 15px;
+      }
+
+      .btn {
+        padding: 16px 30px;
+        font-size: 16px;
+        border-radius: 10px;
+        margin-top: 25px;
+      }
+
+      .form-links {
+        margin-top: 25px;
+        font-size: 15px;
+      }
+
+      .form-links a {
+        font-size: 15px;
+      }
+    }
+
+    /* Mobile Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 0;
+        margin: 0;
+        min-height: 100vh;
+        display: block;
+        overflow-x: hidden;
+        width: 100%;
+      }
+
+      .auth-container {
+        flex-direction: column;
+        margin: 0;
+        border-radius: 0;
+        min-height: 100vh;
+        height: auto;
+        width: 100vw;
+        max-width: 100vw;
+        box-shadow: none;
+        display: flex;
+      }
+
+    }
+
+    /* Small Mobile Responsive Design */
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+        margin: 0;
+        min-height: 100vh;
+        display: block;
+        overflow-x: hidden;
+        width: 100%;
+      }
+
+      .auth-container {
+        margin: 0;
+        border-radius: 0;
+        width: 100vw;
+        max-width: 100vw;
+        min-height: 100vh;
+        height: auto;
+        box-shadow: none;
+        display: flex;
+      }
+
+      .branding-section {
+        padding: 30px 15px;
+        border-radius: 0 0 12px 12px;
+        min-height: auto;
+        flex: none;
+      }
+
+      .form-section {
+        padding: 30px 15px;
+        border-radius: 12px 12px 0 0;
+        min-height: auto;
+        flex: none;
+      }
+
+      .brand-title {
+        font-size: 24px;
+        margin-bottom: 12px;
+      }
+
+      .brand-subtitle {
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+
+      .form-title {
+        font-size: 20px;
+        margin-bottom: 12px;
+      }
+
+      .form-subtitle {
+        font-size: 12px;
+        margin-bottom: 20px;
+      }
+
+      .brand-features li {
+        font-size: 12px;
+        margin-bottom: 10px;
+      }
+
+      .logo {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 15px;
+      }
+
+      .logo i {
+        font-size: 25px;
+      }
+
+      .form-icon {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 12px;
+      }
+
+      .form-icon img {
+        height: 22px;
+        width: 35px;
+      }
+
+      .form-group {
+        margin-bottom: 18px;
+      }
+
+      .form-group label {
+        font-size: 13px;
+        margin-bottom: 5px;
+      }
+
+      .form-group input {
+        padding: 12px 14px 12px 35px;
+        font-size: 13px;
+        border-radius: 6px;
+      }
+
+      .form-group .input-icon {
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 13px;
+      }
+
+      .btn {
+        padding: 12px 20px;
+        font-size: 13px;
+        border-radius: 6px;
+        margin-top: 18px;
+      }
+
+      .form-links {
+        margin-top: 18px;
+        font-size: 13px;
+      }
+
+      .form-links a {
+        font-size: 13px;
+      }
+    }
+
+    /* Extra Small Mobile */
+    @media (max-width: 360px) {
+      body {
+        padding: 0;
+        margin: 0;
+        min-height: 100vh;
+        display: block;
+        overflow-x: hidden;
+        width: 100%;
+      }
+
+      .auth-container {
+        width: 100vw;
+        max-width: 100vw;
+        margin: 0;
+        border-radius: 0;
+        min-height: 100vh;
+        height: auto;
+        box-shadow: none;
+        display: flex;
       }
 
       .branding-section,
       .form-section {
-        padding: 30px 20px;
+        padding: 25px 12px;
+        min-height: auto;
+        flex: none;
+      }
+
+      .branding-section {
+        border-radius: 0 0 8px 8px;
+      }
+
+      .form-section {
+        border-radius: 8px 8px 0 0;
+      }
+
+      .brand-title {
+        font-size: 22px;
+        margin-bottom: 10px;
+      }
+
+      .brand-subtitle {
+        font-size: 13px;
+        margin-bottom: 18px;
+      }
+
+      .form-title {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .form-subtitle {
+        font-size: 11px;
+        margin-bottom: 18px;
+      }
+
+      .brand-features li {
+        font-size: 11px;
+        margin-bottom: 8px;
+      }
+
+      .logo {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 12px;
+      }
+
+      .logo i {
+        font-size: 22px;
+      }
+
+      .form-icon {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 10px;
+      }
+
+      .form-icon img {
+        height: 20px;
+        width: 32px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        font-size: 12px;
+        margin-bottom: 4px;
+      }
+
+      .form-group input {
+        padding: 10px 12px 10px 30px;
+        font-size: 12px;
+        border-radius: 5px;
+      }
+
+      .form-group .input-icon {
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+      }
+
+      .btn {
+        padding: 10px 18px;
+        font-size: 12px;
+        border-radius: 5px;
+        margin-top: 15px;
+      }
+
+      .form-links {
+        margin-top: 15px;
+        font-size: 12px;
+      }
+
+      .form-links a {
+        font-size: 12px;
+      }
+    }
+
+    /* Small Mobile Responsive Design */
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+        margin: 0;
+        min-height: 100vh;
+        display: block;
+        overflow-x: hidden;
+        width: 100%;
+      }
+
+      .auth-container {
+        margin: 0;
+        border-radius: 0;
+        width: 100vw;
+        max-width: 100vw;
+        min-height: 100vh;
+        height: auto;
+        box-shadow: none;
+        display: flex;
+      }
+
+      .branding-section {
+        padding: 30px 15px;
+        border-radius: 0 0 12px 12px;
+        min-height: auto;
+        flex: none;
+      }
+
+      .form-section {
+        padding: 30px 15px;
+        border-radius: 12px 12px 0 0;
+        min-height: auto;
+        flex: none;
+      }
+
+      .logo {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+      }
+
+      .logo i {
+        font-size: 30px;
+      }
+
+      .brand-title {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+
+      .brand-subtitle {
+        font-size: 14px;
+        margin-bottom: 25px;
+      }
+
+      .form-title {
+        font-size: 22px;
+      }
+
+      .form-subtitle {
+        font-size: 14px;
+      }
+
+      .form-icon {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 14px;
+      }
+
+      .form-icon img {
+        height: 22px;
+        width: 35px;
+      }
+
+      .form-group {
+        margin-bottom: 18px;
+      }
+
+      .form-group label {
+        font-size: 13px;
+        margin-bottom: 6px;
+      }
+
+      input {
+        padding: 12px 12px 12px 40px;
+        font-size: 14px;
+        border-radius: 10px;
+      }
+
+      .input-wrapper i {
+        left: 14px;
+        font-size: 14px;
+      }
+
+      .btn {
+        padding: 12px;
+        font-size: 14px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+      }
+
+      .form-links {
+        margin-top: 18px;
+      }
+
+      .form-links a {
+        font-size: 13px;
+        margin: 0 6px;
+      }
+
+      .brand-features li {
+        font-size: 13px;
+        margin-bottom: 10px;
+      }
+
+      .brand-features i {
+        margin-right: 10px;
+        width: 18px;
+      }
+    }
+
+    /* Extra Small Mobile */
+    @media (max-width: 360px) {
+      body {
+        padding: 0;
+        margin: 0;
+        min-height: 100vh;
+        display: block;
+        overflow-x: hidden;
+        width: 100%;
+      }
+
+      .auth-container {
+        width: 100vw;
+        max-width: 100vw;
+        margin: 0;
+        border-radius: 0;
+        min-height: 100vh;
+        height: auto;
+        box-shadow: none;
+        display: flex;
+      }
+
+      .branding-section,
+      .form-section {
+        padding: 25px 12px;
+        min-height: auto;
+        flex: none;
+      }
+
+      .branding-section {
+        border-radius: 0 0 8px 8px;
+      }
+
+      .form-section {
+        border-radius: 8px 8px 0 0;
+      }
+
+      .brand-title {
+        font-size: 22px;
+      }
+
+      .form-title {
+        font-size: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      input {
+        padding: 10px 10px 10px 36px;
+        font-size: 13px;
+      }
+
+      .btn {
+        padding: 10px;
+        font-size: 13px;
       }
     }
 
@@ -423,7 +1003,7 @@
       <div class="form-container active" id="loginPage">
         <div class="form-header">
           <div class="form-icon">
-            <i class="fas fa-sign-in-alt"></i>
+            <img src="assets/images/stackly_logo_transparent.png" alt="Stackly Logo" style="height: 30px; width: 50px;">
           </div>
           <h2 class="form-title">Welcome Back</h2>
           <p class="form-subtitle">Sign in to your account</p>
@@ -610,6 +1190,7 @@
 
       // Clear previous errors
       errorElement.innerHTML = "";
+      errorElement.classList.remove("show");
 
       // Admin login check
       if(email === "admin@enkonix.in" && pass === "admin123"){
@@ -626,6 +1207,7 @@
         window.location.href = "home.html";
       } else {
         errorElement.innerHTML = '<i class="fas fa-exclamation-circle"></i> Invalid email or password. Please try again.';
+        errorElement.classList.add("show");
       }
     });
 
@@ -641,9 +1223,11 @@
 
       // Clear previous errors
       errorElement.innerHTML = "";
+      errorElement.classList.remove("show");
 
       if(users[email]){
         errorElement.innerHTML = '<i class="fas fa-exclamation-circle"></i> User already exists. Please sign in instead.';
+        errorElement.classList.add("show");
         setTimeout(() => showPage("loginPage"), 2000);
       } else {
         users[email] = {
@@ -653,7 +1237,7 @@
         };
         localStorage.setItem("users", JSON.stringify(users));
         errorElement.innerHTML = '<i class="fas fa-check-circle"></i> Account created successfully! Redirecting to sign in...';
-        errorElement.className = "success";
+        errorElement.className = "success show";
         setTimeout(() => showPage("loginPage"), 2000);
       }
     });
@@ -667,14 +1251,16 @@
 
       // Clear previous errors
       errorElement.innerHTML = "";
+      errorElement.classList.remove("show");
 
       if(users[email]){
         localStorage.setItem("resetUser", email);
         errorElement.innerHTML = '<i class="fas fa-check-circle"></i> Email found! Redirecting to password reset...';
-        errorElement.className = "success";
+        errorElement.className = "success show";
         setTimeout(() => showPage("resetPage"), 1500);
       } else {
         errorElement.innerHTML = '<i class="fas fa-exclamation-circle"></i> Email not found. Please check your email address.';
+        errorElement.classList.add("show");
       }
     });
 
@@ -689,6 +1275,7 @@
 
       // Clear previous errors
       errorElement.innerHTML = "";
+      errorElement.classList.remove("show");
 
       if(newPass === confirmPass){
         if(users[email]) {
@@ -696,13 +1283,15 @@
           localStorage.setItem("users", JSON.stringify(users));
           localStorage.removeItem("resetUser");
           errorElement.innerHTML = '<i class="fas fa-check-circle"></i> Password reset successful! Redirecting to sign in...';
-          errorElement.className = "success";
+          errorElement.className = "success show";
           setTimeout(() => showPage("loginPage"), 2000);
         } else {
           errorElement.innerHTML = '<i class="fas fa-exclamation-circle"></i> User not found. Please try again.';
+          errorElement.classList.add("show");
         }
       } else {
         errorElement.innerHTML = '<i class="fas fa-exclamation-circle"></i> Passwords do not match. Please try again.';
+        errorElement.classList.add("show");
       }
     });
   </script>
